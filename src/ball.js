@@ -3,7 +3,6 @@ class Ball {
     this.r = 9;
     this.reset();
     this.angle = 0;
-    this.no
   }
   reset() {
     this.xspeed = 0;
@@ -59,7 +58,6 @@ class Ball {
       console.log("ball collision")
       newBalls.splice(newBalls.indexOf(newBall),1)
       let ball = new Ball();
-      ball.no=balls.length+1
       balls.push(ball);
       return true
     }
@@ -82,6 +80,7 @@ class Ball {
       }
       this.reset();
       console.log(balls)
+      aim=true
     }
   }
 }

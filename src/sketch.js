@@ -3,7 +3,7 @@ let blocks = [];
 let newBalls=[]
 let available=[true,true,true,true,true,true,true,true,true,true]
 let ang = 0;
-let aim = false;
+let aim = true;
 let index = 0;
 let myInterval;
 
@@ -14,7 +14,6 @@ function setup() {
   angleMode(DEGREES);
   stroke(255, 100, 50);
   ball = new Ball();
-  ball.no = 1;
   balls.push(ball);
   block = new Block();
   blocks.push(block);
@@ -24,7 +23,9 @@ function setup() {
 
 function draw() {
   background(0);
-  line(width / 2, height - 50, mouseX, mouseY);
+  if (aim){
+    line(width / 2, height - 50, mouseX, mouseY);
+  }
   fill(150, 100, 100);
   rect(width / 2, 20, 500, 40);
   mouseClicked;
@@ -62,14 +63,15 @@ function mouseClicked() {
 }
 
 function shoot() {
-    if (balls[index].angle > 0) {
-      balls[index].xspeed = -5 * abs(cos(balls[index].angle));
-    } else if (balls[index].angle < 0) {
-      balls[index].xspeed = 5 * abs(cos(balls[index].angle));
-    }
-    balls[index].yspeed = -abs(5 * sin(balls[index].angle));
-    console.log(balls[index].angle,index)
-    index++;
+  aim=false
+  if (balls[index].angle > 0) {
+    balls[index].xspeed = -5 * abs(cos(balls[index].angle));
+  } else if (balls[index].angle < 0) {
+    balls[index].xspeed = 5 * abs(cos(balls[index].angle));
+  }
+  balls[index].yspeed = -abs(5 * sin(balls[index].angle));
+  console.log(balls[index].angle,index)
+  index++;
 }
 function myTimer() {
   const date = new Date();
