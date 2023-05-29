@@ -4,6 +4,7 @@ let newBalls=[]
 let available=[true,true,true,true,true,true,true,true,true,true]
 let ang = 0;
 let aim = true;
+let game= true
 let index = 0;
 let myInterval;
 
@@ -15,42 +16,55 @@ function setup() {
   stroke(255, 100, 50);
   ball = new Ball();
   balls.push(ball);
-  block = new Block();
-  blocks.push(block);
+  for(var i=0;i<floor(random(1,9));i++){
+    block = new Block();
+    blocks.push(block);
+  }
   newBall = new NewBall()
   newBalls.push(newBall)
 }
 
 function draw() {
   background(0);
-  if (aim){
-    line(width / 2, height - 50, mouseX, mouseY);
+  if (!game){
+    noFill();
+    fill(200, 0, 100);
+    textSize(32)
+    text("GAME OVER",width/2,height/2)
+    console.log("game over",balls)
   }
-  fill(150, 100, 100);
-  rect(width / 2, 20, 500, 40);
-  mouseClicked;
-  if (index>=balls.length){
-    clearInterval(myInterval)
-  }
-  for (ball of balls) {
-    ball.show();
-    ball.update();
-    ball.edges();
-    for (block of blocks) {
-      block.show();
-      if (ball.blockCollision(block)){
-        break
-      }
-      ball.death()
+  else{
+    if (aim){
+      line(width / 2, height - 50, mouseX, mouseY);
     }
-    for(newBall of newBalls){
-      newBall.show()
-      if (ball.ballCollision(newBall)){
-        break
-      }
-      newBall.death()
+    fill(150, 100, 100);
+    rect(width / 2, 20, 500, 40);
+    mouseClicked;
+    if (index>=balls.length){
+      clearInterval(myInterval)
     }
-    ball.death();
+    for (ball of balls) {
+      ball.show();
+      ball.update();
+      ball.edges();
+      for (block of blocks) {
+        block.show();
+        if (ball.blockCollision(block)){
+          break
+        }
+        if (block.death()){
+          return
+        }
+      }
+      for(newBall of newBalls){
+        newBall.show()
+        if (ball.ballCollision(newBall)){
+          break
+        }
+        newBall.death()
+      }
+      ball.death();
+    }
   }
 }
 function mouseClicked() {
@@ -76,4 +90,7 @@ function shoot() {
 function myTimer() {
   const date = new Date();
   document.getElementById("demo").innerHTML = date.toLocaleTimeString();
+}
+function startGame(){
+  game=true
 }

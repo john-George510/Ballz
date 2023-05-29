@@ -6,3 +6,18 @@ html, body {
 canvas {
   display: block;
 }
+.btn{
+  position: absolute;
+  bottom:150px;
+  left:210px;
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #4CAF50;
+  color: white;
+  font-size: 16px;
+  border: none;
+  cursor: pointer;
+  border-radius: 4px;
+  text-align: center;
+  text-decoration: none;
+}

@@ -10,10 +10,11 @@ class Block {
     this.x = 25+50*loc
 		available[loc]=!available[loc]
     this.y = 120;
-    this.points = 100;
+    this.points = floor(random(balls.length,balls.length*2+1));
   }
   show() {
-    fill(120, 100, 100);
+    const hue =floor(map(this.points,0,100,0,255))
+    fill(hue, 100, 100);
     rect(this.x, this.y, this.width, this.width, 3);
     noFill();
     fill(0, 100, 0);
@@ -25,8 +26,21 @@ class Block {
     this.y += this.width;
   }
   death(){
-    if(this.y>height-50){
-      blocks.splice(blocks.indexOf(this),1)
+    if(this.y>height-600){
+      available=[true,true,true,true,true,true,true,true,true,true]
+      blocks=[]
+      balls=[]
+      newBalls=[]
+      ball = new Ball();
+      balls.push(ball);
+      for(var i=0;i<floor(random(1,9));i++){
+        block = new Block();
+        blocks.push(block);
+      }
+      newBall = new NewBall()
+      newBalls.push(newBall)
+      game=false
+      return true
     }
   }
 }
