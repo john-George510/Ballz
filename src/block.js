@@ -26,19 +26,7 @@ class Block {
     this.y += this.width;
   }
   death(){
-    if(this.y>height-600){
-      available=[true,true,true,true,true,true,true,true,true,true]
-      blocks=[]
-      balls=[]
-      newBalls=[]
-      ball = new Ball();
-      balls.push(ball);
-      for(var i=0;i<floor(random(1,9));i++){
-        block = new Block();
-        blocks.push(block);
-      }
-      newBall = new NewBall()
-      newBalls.push(newBall)
+    if(this.y>height-100){
       game=false
       return true
     }

@@ -13,15 +13,7 @@ function setup() {
   colorMode(HSB);
   rectMode(CENTER);
   angleMode(DEGREES);
-  stroke(255, 100, 50);
-  ball = new Ball();
-  balls.push(ball);
-  for(var i=0;i<floor(random(1,9));i++){
-    block = new Block();
-    blocks.push(block);
-  }
-  newBall = new NewBall()
-  newBalls.push(newBall)
+  startGame()
 }
 
 function draw() {
@@ -34,11 +26,34 @@ function draw() {
     console.log("game over",balls)
   }
   else{
-    if (aim){
-      line(width / 2, height - 50, mouseX, mouseY);
+    if (aim && mouseX>0 && mouseX<width && mouseY>0 && mouseY<height-50){
+      push()
+      const no= floor(dist(width/2,height-50,mouseX,mouseY)/18)
+      console.log(no)
+      ang = atan((mouseY - (height - 50)) / (mouseX - width / 2));
+      for(var i=1;i<=no;i++){
+        aimBall= new Ball()
+        console.log("ball created",i,ang)
+        aimBall.r=5
+        if (ang>0){
+          aimBall.x-=cos(ang)*i*18
+        }
+        else{
+          aimBall.x+=cos(ang)*i*18
+        }
+        aimBall.y-=abs(sin(ang)*i*18)
+        aimBall.show()
+      }
+      pop()
     }
-    fill(150, 100, 100);
+    fill(130, 100, 100);
     rect(width / 2, 20, 500, 40);
+    push()
+    fill(255)
+    textSize(32);
+    textStyle(BOLD)
+    text("Ballz",width/2,30)
+    pop()
     mouseClicked;
     if (index>=balls.length){
       clearInterval(myInterval)
@@ -68,12 +83,13 @@ function draw() {
   }
 }
 function mouseClicked() {
-  ang = atan((mouseY - (height - 50)) / (mouseX - width / 2));
-  for (ball of balls) {
-    ball.angle=ang;
+  if (mouseX>0 && mouseX<width && mouseY>0 && mouseY<height){
+    for (ball of balls) {
+      ball.angle=ang;
+    }
+    myInterval=setInterval(shoot,100)
+    index=0
   }
-  myInterval=setInterval(shoot,100)
-  index=0
 }
 
 function shoot() {
@@ -92,5 +108,20 @@ function myTimer() {
   document.getElementById("demo").innerHTML = date.toLocaleTimeString();
 }
 function startGame(){
+  balls = [];
+  blocks = [];
+  newBalls=[]
+  available=[true,true,true,true,true,true,true,true,true,true]
+  aim = true;
+  index = 0;
   game=true
+  ball = new Ball();
+  balls.push(ball);
+  for(var i=0;i<floor(random(1,9));i++){
+    block = new Block();
+    blocks.push(block);
+  }
+  newBall = new NewBall()
+  newBalls.push(newBall)
+  console.log(balls)
 }

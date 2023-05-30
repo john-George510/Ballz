@@ -28,12 +28,7 @@ class Ball {
     }
   }
   blockCollision(block) {
-    if (
-      this.x + this.r > block.x - block.width / 2 &&
-      this.x - this.r < block.x + block.width / 2 &&
-      this.y + this.r > block.y - block.width / 2 &&
-      this.y - this.r < block.y + block.width / 2
-    ) {
+    if (dist(this.x,this.y,block.x,block.y)<this.r+block.width/2*Math.sqrt(2)) {
       block.points--;
       let dir = atan2(block.y - this.y, block.x - this.x);
       console.log("collision", dir);
