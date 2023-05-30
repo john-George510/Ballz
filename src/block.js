@@ -1,34 +1,33 @@
 class Block {
   constructor() {
-    rectMode(CENTER);
-    var loc=floor(random(10))
-			while(!available[loc]){
-				console.log(available[loc])
-				loc=floor(random(10))
-			}
+    let loc = floor(random(10));
+    while (!available[loc]) {
+      loc = floor(random(10));
+    }
+    available[loc] = false;
     this.width = 50;
-    this.x = 25+50*loc
-		available[loc]=!available[loc]
+    this.x = 25 + 50 * loc;
     this.y = 120;
-    this.points = floor(random(balls.length,balls.length*2+1));
+    this.points = floor(random(balls.length, balls.length * 2 + 1));
+    console.log("Block created");
   }
   show() {
-    const hue =floor(map(this.points,0,100,0,255))
+    const hue = floor(map(this.points, 0, 50, 0, 255));
     fill(hue, 100, 100);
     rect(this.x, this.y, this.width, this.width, 3);
-    noFill();
     fill(0, 100, 0);
     textSize(24);
-    textAlign(CENTER);
-    text(this.points, this.x, this.y + 7);
+    textAlign(CENTER,CENTER);
+    text(this.points, this.x, this.y);
   }
   move() {
     this.y += this.width;
   }
-  death(){
-    if(this.y>height-100){
-      game=false
-      return true
+  death() {
+    if (this.y > height - 100) {
+      game = false;
+      return true;
     }
+    return false;
   }
 }

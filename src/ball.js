@@ -13,7 +13,7 @@ class Ball {
   show() {
     fill(60, 100, 100);
     ellipse(this.x, this.y, this.r * 2);
-    text(balls.length,width/2,height-15)
+    text(balls.length, width / 2, height - 15);
   }
   update() {
     this.x += this.xspeed;
@@ -23,15 +23,18 @@ class Ball {
     if (this.x - this.r < 0 || this.x + this.r > width) {
       this.xspeed *= -1;
     }
-    if (this.y - this.r < 40) {
+    if (this.y - this.r < 50) {
       this.yspeed *= -1;
     }
   }
   blockCollision(block) {
-    if (dist(this.x,this.y,block.x,block.y)<this.r+block.width/2*Math.sqrt(2)) {
+    if (
+      dist(this.x, this.y, block.x, block.y) <
+      this.r + (block.width / 2) * Math.sqrt(2)
+    ) {
       block.points--;
-      let dir = atan2(block.y - this.y, block.x - this.x);
-      console.log("collision", dir);
+      const dir = atan2(block.y - this.y, block.x - this.x);
+      console.log("block collision");
       if (
         (dir < 45 && dir > -45) ||
         (dir > 135 && dir < 180) ||
@@ -42,40 +45,35 @@ class Ball {
       if ((dir > 45 && dir < 135) || (dir > -135 && dir < -45)) {
         this.yspeed *= -1;
       }
-      if (block.points<=0){
-        blocks.splice(blocks.indexOf(block),1)
+      if (block.points <= 0) {
+        blocks.splice(blocks.indexOf(block), 1);
       }
-      return true
+      return true;
     }
   }
-  ballCollision(newBall){
-    if (dist(this.x,this.y,newBall.x,newBall.y)<this.r+newBall.r){
-      console.log("ball collision")
-      newBalls.splice(newBalls.indexOf(newBall),1)
-      let ball = new Ball();
+  ballCollision(newBall) {
+    if (dist(this.x, this.y, newBall.x, newBall.y) < this.r + newBall.r) {
+      console.log("ball collision");
+      newBalls.splice(newBalls.indexOf(newBall), 1);
+      const ball = new Ball();
       balls.push(ball);
-      return true
+      return true;
     }
   }
   death() {
     if (this.y > height) {
-      available=[true,true,true,true,true,true,true,true,true,true]
-      for (block of blocks) {
-        block.move();
-        console.log("after block", block);
-      }
-      for(newBall of newBalls){
-        newBall.move()
-      }
-      newBall = new NewBall()
-      newBalls.push(newBall)
-      for(var i=0;i<floor(random(1,9));i++){
-        block = new Block();
+      available = Array(10).fill(true)
+      blocks.forEach((block) => block.move());
+      newBalls.forEach((newBall) => newBall.move());
+      const newBall = new NewBall();
+      newBalls.push(newBall);
+      for (let i = 0; i < floor(random(1, 9)); i++) {
+        const block = new Block();
         blocks.push(block);
       }
       this.reset();
-      console.log(balls)
-      aim=true
+      console.log("next level");
+      aim = true;
     }
   }
 }

@@ -1,11 +1,3 @@
-let balls = [];
-let blocks = [];
-let newBalls=[]
-let available=[true,true,true,true,true,true,true,true,true,true]
-let ang = 0;
-let aim = true;
-let game= true
-let index = 0;
 let myInterval;
 
 function setup() {
@@ -13,115 +5,125 @@ function setup() {
   colorMode(HSB);
   rectMode(CENTER);
   angleMode(DEGREES);
-  startGame()
+  startGame();
 }
 
 function draw() {
   background(0);
-  if (!game){
-    noFill();
+  if (!game) {
     fill(200, 0, 100);
-    textSize(32)
-    text("GAME OVER",width/2,height/2)
-    console.log("game over",balls)
-  }
-  else{
-    if (aim && mouseX>0 && mouseX<width && mouseY>0 && mouseY<height-50){
-      push()
-      const no= floor(dist(width/2,height-50,mouseX,mouseY)/18)
-      console.log(no)
-      ang = atan((mouseY - (height - 50)) / (mouseX - width / 2));
-      for(var i=1;i<=no;i++){
-        aimBall= new Ball()
-        console.log("ball created",i,ang)
-        aimBall.r=5
-        if (ang>0){
-          aimBall.x-=cos(ang)*i*18
-        }
-        else{
-          aimBall.x+=cos(ang)*i*18
-        }
-        aimBall.y-=abs(sin(ang)*i*18)
-        aimBall.show()
-      }
-      pop()
-    }
-    fill(130, 100, 100);
-    rect(width / 2, 20, 500, 40);
-    push()
-    fill(255)
     textSize(32);
-    textStyle(BOLD)
-    text("Ballz",width/2,30)
-    pop()
-    mouseClicked;
-    if (index>=balls.length){
-      clearInterval(myInterval)
+    text("GAME OVER", width / 2, height / 2);
+    console.log("game over");
+  } else {
+    if (aim && isMouseWithinBounds()) {
+      drawAimBalls();
     }
-    for (ball of balls) {
+    drawHeader();
+    for (let i = 0; i < balls.length; i++) {
+      const ball = balls[i];
       ball.show();
       ball.update();
       ball.edges();
-      for (block of blocks) {
+      for (let j = 0; j < blocks.length; j++) {
+        const block = blocks[j];
         block.show();
-        if (ball.blockCollision(block)){
-          break
+        if (ball.blockCollision(block)) {
+          break;
         }
-        if (block.death()){
-          return
+        if (block.death()) {
+          return;
         }
       }
-      for(newBall of newBalls){
-        newBall.show()
-        if (ball.ballCollision(newBall)){
-          break
+      for (let j = 0; j < newBalls.length; j++) {
+        const newBall = newBalls[j];
+        newBall.show();
+        if (ball.ballCollision(newBall)) {
+          break;
         }
-        newBall.death()
+        newBall.death();
       }
       ball.death();
     }
   }
 }
+
 function mouseClicked() {
-  if (mouseX>0 && mouseX<width && mouseY>0 && mouseY<height){
+  if (isMouseWithinBounds()) {
     for (ball of balls) {
-      ball.angle=ang;
+      ball.angle = ang;
     }
-    myInterval=setInterval(shoot,100)
-    index=0
+    index = 0;
+    myInterval = setInterval(shoot, 100);
   }
 }
 
 function shoot() {
-  aim=false
-  if (balls[index].angle > 0) {
-    balls[index].xspeed = -5 * abs(cos(balls[index].angle));
-  } else if (balls[index].angle < 0) {
-    balls[index].xspeed = 5 * abs(cos(balls[index].angle));
+  aim = false;
+  if (index < balls.length) {
+    if (balls[index].angle > 0) {
+      balls[index].xspeed = -5 * abs(cos(balls[index].angle));
+    } else if (balls[index].angle < 0) {
+      balls[index].xspeed = 5 * abs(cos(balls[index].angle));
+    }
+    balls[index].yspeed = -abs(5 * sin(balls[index].angle));
+    console.log("ball shot", index);
+    index++;
+  } else {
+    clearInterval(myInterval);
   }
-  balls[index].yspeed = -abs(5 * sin(balls[index].angle));
-  console.log(balls[index].angle,index)
-  index++;
 }
-function myTimer() {
-  const date = new Date();
-  document.getElementById("demo").innerHTML = date.toLocaleTimeString();
-}
-function startGame(){
+
+function startGame() {
   balls = [];
   blocks = [];
-  newBalls=[]
-  available=[true,true,true,true,true,true,true,true,true,true]
+  newBalls = [];
+  available = Array(10).fill(true);
   aim = true;
-  index = 0;
-  game=true
-  ball = new Ball();
+  game = true;
+  const ball = new Ball();
   balls.push(ball);
-  for(var i=0;i<floor(random(1,9));i++){
-    block = new Block();
+  for (var i = 0; i < floor(random(1, 9)); i++) {
+    const block = new Block();
     blocks.push(block);
   }
-  newBall = new NewBall()
-  newBalls.push(newBall)
-  console.log(balls)
+  const newBall = new NewBall();
+  newBalls.push(newBall);
+  console.log("Game started");
+}
+
+function isMouseWithinBounds() {
+  if (mouseX > 0 && mouseX < width && mouseY > 50 && mouseY < height - 50) {
+    return true;
+  }
+  return false;
+}
+
+function drawAimBalls() {
+  push();
+  const no = floor(dist(width / 2, height - 50, mouseX, mouseY) / 18);
+  ang = atan((mouseY - (height - 50)) / (mouseX - width / 2));
+  for (let i = 1; i <= no; i++) {
+    const aimBall = new Ball();
+    aimBall.r = 5;
+    if (ang > 0) {
+      aimBall.x -= cos(ang) * i * 18;
+    } else {
+      aimBall.x += cos(ang) * i * 18;
+    }
+    aimBall.y -= abs(sin(ang) * i * 18);
+    aimBall.show();
+  }
+  pop();
+}
+
+function drawHeader() {
+  fill(130, 100, 100);
+  rect(width / 2, 20, 500, 50);
+  push();
+  fill(255);
+  textSize(32);
+  textStyle(BOLD);
+  text("Ballz", width / 2, 30);
+  pop();
 }
