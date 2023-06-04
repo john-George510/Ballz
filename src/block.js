@@ -5,7 +5,7 @@ class Block {
       loc = floor(random(10));
     }
     available[loc] = false;
-    this.width = 50;
+    this.width = width/10;
     this.x = 25 + 50 * loc;
     this.y = 120;
     this.points = floor(random(balls.length, balls.length * 2 + 1));

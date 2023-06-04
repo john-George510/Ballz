@@ -29,8 +29,10 @@ class Ball {
   }
   blockCollision(block) {
     if (
-      dist(this.x, this.y, block.x, block.y) <
-      this.r + (block.width / 2) * Math.sqrt(2)
+      this.x + this.r > block.x - block.width / 2 &&
+      this.x - this.r < block.x + block.width / 2 &&
+      this.y + this.r > block.y - block.width / 2 &&
+      this.y - this.r < block.y + block.width / 2
     ) {
       block.points--;
       const dir = atan2(block.y - this.y, block.x - this.x);
@@ -62,7 +64,7 @@ class Ball {
   }
   death() {
     if (this.y > height) {
-      available = Array(10).fill(true)
+      available = Array(10).fill(true);
       blocks.forEach((block) => block.move());
       newBalls.forEach((newBall) => newBall.move());
       const newBall = new NewBall();
